@@ -1,5 +1,5 @@
 package jdbc;
-
+//This all imported pacakages from java packages
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,10 +10,13 @@ import java.util.Scanner;
 
 public class JdbcConnectionPrepareStatementCRUD {
 	public static void main(String[] args) {
+		//Creating database cnnection url
 		String url = "jdbc:mysql://localhost:3306?user=root&password=12345";
+		//The scanner class used for to collect user information
 		Scanner scanner = new Scanner(System.in);
 		boolean exit = false;
 		while (!exit) {
+			//to select options according to user needed
 			System.out.println("Enter the number one number from below this");
 			System.out.println("1. For to display the details");
 			System.out.println("2. For to insert the data");
@@ -21,6 +24,7 @@ public class JdbcConnectionPrepareStatementCRUD {
 			System.out.println("4. For to delet the data");
 			System.out.println("5. For exit");
 			int number = scanner.nextInt();
+			//to perform cases according to user input
 			switch (number) {
 			case 1:
 				try {
@@ -55,13 +59,14 @@ public class JdbcConnectionPrepareStatementCRUD {
 				}
 				break;
 			case 2:
-				//to insert the data in database
+				//to insert the data in database we user insert query
 				String insert = "insert into assignement.bank (BName, AcHoldName, IFSCcode, MobileNumber, BankBalance, BankId, AcHolderNumber) value(?,?,?,?,?,?,?)";
 				try {
 					Connection connection = DriverManager.getConnection(url);
 					//System.out.println("database connected...");
 					PreparedStatement preparedStatement = connection.prepareStatement(insert);
 					//System.out.println("platform connected...");
+					//Collecting the user data 
 					System.out.println("Enter the Bank name: ");
 					String bname = scanner.next();
 					System.out.println("Enter the Acholder name: ");
@@ -84,6 +89,7 @@ public class JdbcConnectionPrepareStatementCRUD {
 					preparedStatement.setInt(6, bankid);
 					preparedStatement.setInt(7, acNumber);
 					int result = preparedStatement.executeUpdate();
+					//if result greater than 0 it will be inserted the data in database
 					if (result > 0) {
 						System.out.println("data inserted successfully...");
 						insert = "select * from assignement.bank where AcHolderNumber like CONCAT('%',?)";
@@ -93,6 +99,7 @@ public class JdbcConnectionPrepareStatementCRUD {
 						preparedStatement.setInt(1, acNumber1);
 						ResultSet resultSet = preparedStatement.executeQuery();
 						System.out.println("resultset connected...");
+						//To print column wise we go for resultSet inbuilt methods
 						for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
 							System.out.printf("%-15s", resultSet.getMetaData().getColumnName(i));
 						}
@@ -113,7 +120,7 @@ public class JdbcConnectionPrepareStatementCRUD {
 				}
 				break;
 			case 3:
-				//to update the data in database
+				//to update the data in database we use update query here
 				String update = "update assignement.bank set bankbalance=? where bankid=?";
 				try {
 					Connection connection = DriverManager.getConnection(url);
@@ -134,6 +141,7 @@ public class JdbcConnectionPrepareStatementCRUD {
 						preparedStatement.setInt(1, acNumber1);
 						ResultSet resultSet = preparedStatement.executeQuery();
 						System.out.println("resultset connected...");
+						//To print column wise we go for resultSet inbuilt methods
 						for (int i = 1; i <= resultSet.getMetaData().getColumnCount(); i++) {
 							System.out.printf("%-15s", resultSet.getMetaData().getColumnName(i));
 						}
@@ -153,7 +161,7 @@ public class JdbcConnectionPrepareStatementCRUD {
 				}
 				break;
 			case 4:
-				//to delete the data from database
+				//to delete the data from database we uses delete query here
 				String delete = "delete FROM assignement.bank where bankid=?";
 				try {
 					Connection connection = DriverManager.getConnection(url);
@@ -183,6 +191,8 @@ public class JdbcConnectionPrepareStatementCRUD {
 			if (!exit) {
 				System.out.println("Do you want to select another option? (y/n)");
 				String choice = scanner.next();
+				/*if the choice will be 'y' it will go for another option according to inptut it will perfom
+                                  operation*/
 				if (!choice.equalsIgnoreCase("y")) {
 					exit = true;
 				}
